@@ -1,0 +1,47 @@
+{% extends 'myapp/base.html' %}
+{% block title %}Search User{% endblock %}
+{% block body %}
+
+<div class="container">
+    <div class="row col-md-12 col-md-offset-2 custyle">
+        <table class="table table-striped custab">
+            <thead>
+                <div class="jumbotron border shadow col-md-12">
+                    <div class="row">
+                        <div class="col-md-8 offset-2">
+                            <form>
+                                <div class="input-group">
+                                    <input name="q" type="text" placeholder="Search Username" class="form-control form-control-lg" />
+                                    <div class="input-group-append">
+                                        <button class="btn btn-primary btn-lg">Search</button>
+                                        <a href="{% url 'adminhome' %}"class="btn btn-info ml-2  btn-lg">Home</a>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+                <tr>
+                    <th>ID</th>
+                    <th>First_Name</th>
+                    <th>Last_Name</th>
+                    <th>Username</th>
+                    <th>Email</th>
+                </tr>
+
+            </thead>
+            {% for item in users %}
+            <tr>
+                <td>{{ item.id }}</td>
+                <td>{{ item.first_name }}</td>
+                <td>{{ item.last_name }}</td>
+                <td>{{ item.username }}</td>
+                <td>{{ item.email }}</td>
+
+            </tr>
+            {% endfor %}
+        </table>
+    </div>
+</div>
+
+{% endblock%}

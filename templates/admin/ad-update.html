@@ -1,0 +1,124 @@
+{% extends 'myapp/base.html' %}
+{% block title %}Admin Update{% endblock %}
+{% block body %}
+<div class="container register" style="background: linear-gradient(90deg, #9ebd13 0%, #008552 100%);">
+    <div class="row">
+        <div class="col-md-3 register-left">
+            <img src="https://image.ibb.co/n7oTvU/logo_white.png" alt="" />
+            <h3>Welcome</h3><br>
+            <p>Admin Update</p>
+            <a href="{% url 'adminhome' %}"><input type="submit" name="" value="Back to Home" /><br /></a>
+
+        </div>
+        <div class="col-md-9 register-right">
+            <div class="tab-content" id="myTabContent">
+                <div class="tab-pane fade show active" id="home" role="tabpanel" aria-labelledby="home-tab">
+                    <h3 class="register-heading">Update User details!</h3>
+
+                    <div class="row register-form">
+                        <div class="col-md-12">
+                            <span id="error1"></span>
+
+                            <form action="" method="POST" id='regform'>{% csrf_token %}
+
+                                <div class="form-group">
+                                    <label for="" class="label">First name</label>
+                                    <input type="text" class="form-control" id="idfname" name="f_name"
+                                        placeholder="First Name " value="{{ update.first_name }}" />
+                                </div>
+                                <div class="form-group">
+                                    <label for="" class="label">Last name</label>
+                                    <input type="text" class="form-control" id="idlname" name='l_name'
+                                        placeholder="Last Name " value="{{ update.last_name }}" />
+                                </div>
+                                <div class="form-group">
+                                    <label for="" class="label">Username</label>
+                                    <input type="text" class="form-control" id="iduname" name='username'
+                                        placeholder="User name " value="{{ update.username }}" />
+                                </div>
+                                <div class="form-group">
+                                    <label for="" class="label">Email</label>
+                                    <input type="email" class="form-control" id="idemail" name='email'
+                                        placeholder="Your Email "  value="{{ update.email }}" />
+                                </div>
+                                <input type="button" id='au_button' class="btnRegister "
+                                    style="background-color:#008552" value="Update" />
+
+                            </form>
+
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+<script src="https://code.jquery.com/jquery-3.5.1.js" integrity="sha256-QWo7LDvxbWT2tbbQ97B53yJnYU3WhH/C8ycbRAkjPDc="
+    crossorigin="anonymous"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script> 
+
+<script>
+    
+    $("#au_button").click(function () {
+        console.log("here");
+        var fname = $("#idfname").val()
+        var fname_len = $("#idfname").val().length
+        var lname = $("#idlname").val()
+        var uname = $("#iduname").val()
+        var uname_len = $("#iduname").val().length
+        var email = $("#idemail").val()
+        var at = email.indexOf("@")
+        var dot = email.lastIndexOf(".")
+        var pk = '{{update.id}}'
+        console.log(pk)
+        var data = {
+            'csrfmiddlewaretoken': '{{ csrf_token }}',
+            'fname1': fname,
+            'lname1': lname,
+            'uname1': uname,
+            'email1': email,
+        }
+        if(fname_len < 3){
+            $("#error1").html('First name must be more than 3 characters')
+        }
+        else if (lname === '') {
+            $('#error1').html('Pease enter your last_name')
+
+        }
+        else if (uname_len < 3) {
+            $('#error1').html('Username must be more than 3 characters')
+    
+        }
+        else if (at<1 || dot<at+2 || dot+2>=email.length) {
+            $('#error1').html('Email must be Email format eg:abc@yahoo.com')
+    
+        }
+        else {
+            console.log("hai")
+            // create an AJAX call
+            $.ajax({
+                url: "/adminpanel/update/"+pk+"/",
+                method: "POST",
+                data: data,
+                dataType: 'json',
+                // on success
+
+                success: function (data) {
+                    if (data == 'true') {
+                        window.location.replace('/adminpanel/home')
+                    }
+                    if (data == 'false1') {
+                        $('#error1').html(" Username already taken!!!!")
+                    }
+                    if (data == 'false2') {
+                        $('#error1').html(" Email already taken!!!!")
+                    }
+                }
+            })
+
+        }
+    })
+</script>
+{% endblock %}
